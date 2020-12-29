@@ -1,0 +1,34 @@
+version: 2.1
+orbs:
+  sam: circleci/aws-sam-serverless@2.1.0
+  gradle: circleci/gradle@2.2.0
+#jobs:
+#  build_deploy:
+#    executor: sam/default
+#    steps:
+#      - checkout
+#      - sam/install
+#      - run: mkdir -p .aws-sam/build
+#      - run: sam build -t template.yaml -b .aws-sam/build/
+#      - run: sam package --template-file .aws-sam/build/template.yaml --s3-bucket fp-eu-w1-deployment --output-template-file .aws-sam/build/packaged.yaml
+#      - run: sam deploy --capabilities CAPABILITY_IAM --template-file .aws-sam/build/packaged.yaml --stack-name fp-eu-w1-create-sprites-stack --no-fail-on-empty-changeset --debug
+
+workflows:
+  test_and_deploy:
+    jobs:
+      - gradle/test
+      - sam/deploy:
+          name: deploy-production
+          requires:
+            - gradle/test
+          stack-name: fp-eu-w1-create-sprites-stack
+          s3-bucket: fp-eu-w1-deployment
+          template: template.yaml
+          use-container: false
+          debug: true
+#          filters:
+#            branches:
+#              only:
+#                - master
+          context:
+            - aws-eu-west-1-common
