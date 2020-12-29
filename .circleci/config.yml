@@ -19,8 +19,6 @@ workflows:
       - gradle/test:
           app_src_directory: HelloWorldFunction
       - sam/deploy:
-          name: deploy-production
-          base-dir: HelloWorldFunction
           requires:
             - gradle/test
           stack-name: fp-eu-w1-playground-stack
