@@ -32,3 +32,4 @@ workflows:
 #                - master
           context:
             - aws-eu-west-1-common
+            - aws-playground-lambda
